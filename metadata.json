@@ -1,0 +1,6 @@
+{
+  "name": "IRONFORGE FITNESS",
+  "description": "Train smarter at IronForge Fitness with expert coaching, premium equipment, personal training and programs designed around your goals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
