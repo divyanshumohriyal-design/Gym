@@ -1,9 +1,11 @@
 /**
  * IRONFORGE FITNESS - Modern Premium Gym & Athletic Performance Website
  * Designed as a freelance showcase project for a commercial fitness client.
+ * Refactored with Senior Security Engineer specifications for secure authentication.
  */
 
 import React, { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { StatsCounter } from './components/StatsCounter';
@@ -22,10 +24,15 @@ import { ContactAndMap } from './components/ContactAndMap';
 import { Footer } from './components/Footer';
 import { FreeTrialModal } from './components/FreeTrialModal';
 import { BackToTop } from './components/BackToTop';
+import { AuthModal } from './components/AuthModal';
+import { MemberDashboardModal } from './components/MemberDashboardModal';
 
-export default function App() {
+function MainAppContent() {
   const [trialModalOpen, setTrialModalOpen] = useState(false);
   const [preselectedOption, setPreselectedOption] = useState<string | undefined>(undefined);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<'signin' | 'register' | 'forgot' | 'verify'>('signin');
+  const [memberPortalOpen, setMemberPortalOpen] = useState(false);
 
   const handleOpenTrialModal = (option?: string) => {
     setPreselectedOption(option);
@@ -37,10 +44,23 @@ export default function App() {
     setPreselectedOption(undefined);
   };
 
+  const handleOpenAuthModal = (tab: 'signin' | 'register' | 'forgot' | 'verify' = 'signin') => {
+    setAuthModalTab(tab);
+    setAuthModalOpen(true);
+  };
+
+  const handleOpenMemberPortal = () => {
+    setMemberPortalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-[#FAFAF8] text-[#171717] flex flex-col selection:bg-[#E63946] selection:text-white">
       {/* Top Professional Sticky Navigation */}
-      <Navbar onOpenTrialModal={handleOpenTrialModal} />
+      <Navbar
+        onOpenTrialModal={handleOpenTrialModal}
+        onOpenAuthModal={handleOpenAuthModal}
+        onOpenMemberPortal={handleOpenMemberPortal}
+      />
 
       {/* Main Content Sections */}
       <main className="flex-1">
@@ -66,7 +86,11 @@ export default function App() {
         <Facilities />
 
         {/* Membership & Pricing Plans */}
-        <Pricing onSelectPlan={(plan) => handleOpenTrialModal(`${plan} Membership`)} />
+        <Pricing
+          onSelectPlan={(plan) => {
+            handleOpenAuthModal('register');
+          }}
+        />
 
         {/* Real Transformations & Progress */}
         <Transformations />
@@ -99,6 +123,28 @@ export default function App() {
         onClose={handleCloseTrialModal}
         preselectedOption={preselectedOption}
       />
+
+      {/* Senior Security-Engineered Auth Modal (Sign In, Register, Forgot Password, Verify Email) */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        initialTab={authModalTab}
+      />
+
+      {/* Member Security Portal & Dashboard Modal */}
+      <MemberDashboardModal
+        isOpen={memberPortalOpen}
+        onClose={() => setMemberPortalOpen(false)}
+        onOpenVerifyModal={() => handleOpenAuthModal('verify')}
+      />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainAppContent />
+    </AuthProvider>
   );
 }

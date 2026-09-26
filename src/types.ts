@@ -103,3 +103,27 @@ export interface FAQItem {
   answer: string;
   category: string;
 }
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  role: 'member' | 'admin' | 'trainer';
+  membershipTier: 'Basic' | 'Pro' | 'Elite' | 'Guest';
+  isVerified: boolean;
+  createdAt: string;
+  lastLoginAt: string | null;
+}
+
+export interface AuthResponse {
+  message?: string;
+  error?: string;
+  user?: AuthUser;
+  token?: string;
+  expiresIn?: number;
+  devVerificationToken?: string;
+  devResetToken?: string;
+  remainingAttempts?: number;
+  retryAfterSeconds?: number;
+}
+

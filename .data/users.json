@@ -1,0 +1,34 @@
+[
+  {
+    "id": "usr_ironforge_demo",
+    "email": "member@ironforge.com",
+    "name": "Alex Mercer",
+    "passwordHash": "$2b$12$cjZzIQNjNL3MniTqMPYnzOdNo18SENINbmdNSJoTYOQI1oyGUt2ni",
+    "role": "member",
+    "membershipTier": "Elite",
+    "isVerified": true,
+    "verificationTokenHash": null,
+    "verificationTokenExpires": null,
+    "passwordResetTokenHash": null,
+    "passwordResetTokenExpires": null,
+    "createdAt": "2026-09-22T09:55:39.012Z",
+    "updatedAt": "2026-09-22T09:57:01.322Z",
+    "lastLoginAt": "2026-09-22T09:57:01.322Z"
+  },
+  {
+    "id": "usr_1790070957208_j40cwf",
+    "email": "test@example.com",
+    "name": "IronForge Athlete",
+    "passwordHash": "$2b$12$4Cz76Onj1H2to7QNaTzb1uqslB9WO4DCcKT9vAv5yvwsBkRxpsizq",
+    "role": "member",
+    "membershipTier": "Pro",
+    "isVerified": true,
+    "verificationTokenHash": null,
+    "verificationTokenExpires": null,
+    "passwordResetTokenHash": null,
+    "passwordResetTokenExpires": null,
+    "createdAt": "2026-09-22T09:55:57.208Z",
+    "updatedAt": "2026-09-22T09:56:31.155Z",
+    "lastLoginAt": "2026-09-22T09:56:31.155Z"
+  }
+]

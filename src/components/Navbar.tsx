@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Flame, ChevronRight, Phone } from 'lucide-react';
+import { Menu, X, Flame, ChevronRight, Phone, User, ShieldCheck, LogIn } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 interface NavbarProps {
   onOpenTrialModal: (plan?: string) => void;
+  onOpenAuthModal: (tab?: 'signin' | 'register' | 'forgot' | 'verify') => void;
+  onOpenMemberPortal: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenTrialModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onOpenTrialModal,
+  onOpenAuthModal,
+  onOpenMemberPortal,
+}) => {
+  const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -100,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTrialModal }) => {
           </nav>
 
           {/* Right Action */}
-          <div className="hidden sm:flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-3">
             <a
               href="tel:+919876543210"
               className="hidden xl:flex items-center gap-2 text-xs font-semibold text-[#5F6368] hover:text-[#171717] transition-colors"
@@ -110,28 +118,63 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTrialModal }) => {
               <span>+91 98765 43210</span>
             </a>
 
+            {user ? (
+              <button
+                id="navbar-member-portal-btn"
+                onClick={onOpenMemberPortal}
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold bg-[#F3F4F1] hover:bg-[#E5E7EB] text-[#171717] rounded-xl border border-[#E5E7EB] transition-colors cursor-pointer"
+              >
+                <div className="w-5 h-5 rounded-full bg-[#E63946] text-white flex items-center justify-center text-[10px]">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <span>{user.name.split(' ')[0]}</span>
+                <span className="text-[10px] bg-[#E63946]/10 text-[#E63946] px-1.5 py-0.2 rounded font-semibold uppercase">
+                  {user.membershipTier}
+                </span>
+              </button>
+            ) : (
+              <button
+                id="navbar-signin-btn"
+                onClick={() => onOpenAuthModal('signin')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-[#171717] hover:text-[#E63946] rounded-xl hover:bg-[#F3F4F1] transition-colors cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5 text-[#E63946]" />
+                <span>SIGN IN</span>
+              </button>
+            )}
+
             <button
               id="navbar-join-btn"
               onClick={() => onOpenTrialModal()}
-              className="relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-white bg-[#E63946] hover:bg-[#d62839] rounded-xl shadow-md shadow-[#E63946]/20 transition-all duration-200 hover:shadow-lg hover:shadow-[#E63946]/30 active:scale-[0.98] cursor-pointer"
+              className="relative inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#E63946] hover:bg-[#d62839] rounded-xl shadow-md shadow-[#E63946]/20 transition-all duration-200 hover:shadow-lg hover:shadow-[#E63946]/30 active:scale-[0.98] cursor-pointer"
             >
-              JOIN NOW
+              FREE 1-DAY PASS
             </button>
           </div>
 
           {/* Mobile Menu Toggle Button */}
           <div className="flex sm:hidden items-center gap-2">
-            <button
-              onClick={() => onOpenTrialModal()}
-              className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white bg-[#E63946] rounded-lg"
-            >
-              JOIN
-            </button>
+            {user ? (
+              <button
+                onClick={onOpenMemberPortal}
+                className="px-2.5 py-1.5 text-xs font-bold text-[#171717] bg-[#F3F4F1] rounded-lg flex items-center gap-1"
+              >
+                <User className="w-3 h-3 text-[#E63946]" />
+                <span>Portal</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => onOpenAuthModal('signin')}
+                className="px-2.5 py-1.5 text-xs font-bold text-white bg-[#171717] rounded-lg"
+              >
+                Sign In
+              </button>
+            )}
             <button
               id="mobile-menu-toggle"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 text-[#171717] hover:bg-[#F3F4F1] rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#E63946]"
+              className="p-2 text-[#171717] hover:bg-[#F3F4F1] rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#E63946]"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -198,6 +241,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTrialModal }) => {
           </div>
 
           <div className="pt-6 border-t border-[#E5E7EB] space-y-3">
+            {user ? (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenMemberPortal();
+                }}
+                className="w-full py-3 text-center text-xs font-bold uppercase tracking-wider text-[#171717] bg-[#F3F4F1] border border-[#E5E7EB] rounded-xl flex items-center justify-center gap-2"
+              >
+                <User className="w-4 h-4 text-[#E63946]" />
+                <span>MEMBER PORTAL ({user.name})</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAuthModal('signin');
+                }}
+                className="w-full py-3 text-center text-xs font-bold uppercase tracking-wider text-[#171717] bg-[#F3F4F1] border border-[#E5E7EB] rounded-xl flex items-center justify-center gap-2"
+              >
+                <LogIn className="w-4 h-4 text-[#E63946]" />
+                <span>SIGN IN / MEMBER PORTAL</span>
+              </button>
+            )}
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
